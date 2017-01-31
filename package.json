@@ -1,0 +1,48 @@
+{
+  "author": "evan <evan@evantahler.com>",
+  "name": "actionhero_tutorial",
+  "description": "actionhero tutorial",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evantahler/actionhero-tutorial.git"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "actionhero": "^16.0.0",
+    "amqplib": "^0.5.1",
+    "fakeredis": "^1.0.3",
+    "ioredis": "^2.4.0",
+    "mysql": "^2.13.0",
+    "q": "^1.4.1",
+    "sequelize": "^3.30.0",
+    "sequelize-fixtures": "^0.5.6",
+    "twitter": "x"
+  },
+  "devDependencies": {
+    "should": "x",
+    "mocha": "x",
+    "standard": "^8.6.0",
+    "request": "x"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it"
+    ]
+  },
+  "scripts": {
+    "help": "actionhero help",
+    "start": "actionhero start",
+    "actionhero": "actionhero",
+    "startCluster": "actionhero startCluster",
+    "test": "standard && mocha"
+  }
+}

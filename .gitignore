@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+log
+pids
+npm-debug.log
+.idea
+config/servers/twitter.js
+locales/*
+public
+temp.js
