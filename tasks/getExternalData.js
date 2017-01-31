@@ -1,60 +1,67 @@
 'use strict'
-
+var Q = require('q');
 exports.task = {
-    name: 'getExternalData',
+    name: 'getExternalDatazxcxc',
     description: 'My Task',
-    frequency: 10,
+    frequency: 100,
     queue: 'default',
     middleware: [],
 
     run: function (api, params, next) {
         // your logic here
-        //  next (null, 'sdsdsds' )
-        var count = 0;
-        var answerObj = {};
-        var to = setTimeout(function () {
-            next(null, 'finished by timeout')
-        }, 5000);
-        api.currency.getNames(function (err, data) {
-            if (err) next(err);
-            else {
-                api.log('names: ' + JSON.stringify(data));
-                data = data.map(function (cell) {
-                    if (cell && cell.id) return cell;
+        getNames(api)
+            .then(function (names) {
+                var procArr = [];
+                names.forEach(function (cell) {
+                    procArr.push(makeUpdate(api, cell));
                 });
-                data.forEach(function (cell) {
-                    answerObj[cell.name] = '';
-                    makeUpdate(api,cell, function (err, answer) {
-                        count++;
-                        if (err) answerObj[err.name] = err.msg;
-                        else answerObj[answer.name] = answer.msg;
-                        if (count == data.length) {
-                            clearTimeout(to);
-                            next(null, answerObj);
-                        }
-                    })
-                });
-            }
-        });
+                return Q.all(procArr);
+            })
+            .then(function (answer) {
+                next(null, answer)
+            })
+            .catch(function (err) {
+                api.log("getNames ERROR: " + err, 'error');
+                next(err);
+            });
     }
 };
 
-function makeUpdate(api, elem, callback) {
+function getNames(api) {
+    var deferred = Q.defer();
+    api.currency.getNames(function (err, data) {
+        if (err) deferred.reject(err);
+        else {
+            api.log('names: ' + JSON.stringify(data));
+            data = data.map(function (cell) {
+                if (cell && cell.id) return cell;
+            });
+            console.log('newData: ', JSON.stringify(data));
+            deferred.resolve(data);
+        }
+    });
+    return deferred.promise;
+}
+
+
+function makeUpdate(api, elem) {
+    var deferred = Q.defer();
     api.nbu.getCurrencyByDate(null, elem.name, function (err, data) {
-        api.log('nbu answer ' + data);
+        api.log('nbu answer ' + JSON.stringify(data));
         if (err) {
             api.log('getCurrencyByDate ERROR: ', err);
-            callback({name: elem.name, msg: err});
+            deferred.reject(false);
         } else if (data && data.length) {
             data[0].cc = elem.id;
             api.currency.updateValue(data[0], function (err, data) {
                 if (err) {
                     api.log('getCurrencyByDate updateValue ERROR: ', err);
-                    callback({name: elem.name, msg: err});
-                } else callback({name: elem.name, msg: data});
+                    deferred.reject(false);
+                } else deferred.resolve(true);
             })
         } else {
-            callback({name: elem.name, msg: 'no data returned from nbu'});
+            deferred.resolve(false);
         }
-    })
+    });
+    return deferred.promise;
 }

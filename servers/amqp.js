@@ -126,7 +126,7 @@ AmqpService.prototype.getConnect = function () {
 };
 
 AmqpService.prototype.getChannel = function () {
-    console.log('getChannel started', 'debug');
+   // console.log('getChannel started', 'debug');
     var deferred = Q.defer();
     var my = this;
     if (!my.channel) {

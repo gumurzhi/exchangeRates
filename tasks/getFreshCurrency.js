@@ -1,10 +1,14 @@
+'use strict'
+
 exports.task = {
-    name: "getFreshCurrency",
-    queue: 'default',
-    description: "I do stuff",
-    frequency: 5,
-    run: function(api, params, next){
-        // email sending stub
-        console.log('ssdsdsds');
-    }
-}
+  name: 'getFreshCurrency',
+  description: 'My Task',
+  frequency: 2,
+  queue: 'default',
+  middleware: [],
+
+  run: function (api, params, next) {
+    // your logic here
+    next (null, 'resultLogMessage')
+  }
+};
