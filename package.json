@@ -16,6 +16,7 @@
     "amqplib": "^0.5.1",
     "fakeredis": "^1.0.3",
     "ioredis": "^2.4.0",
+    "mariasql": "^0.2.6",
     "mysql": "^2.13.0",
     "q": "^1.4.1",
     "sequelize": "^3.30.0",
